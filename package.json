@@ -1,0 +1,21 @@
+{
+  "name": "dg",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "npm run build:live",
+    "build:live": "nodemon --exec ./node_modules/.bin/ts-node -- ./src/app.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^10.5.4",
+    "ts-node": "^7.0.0",
+    "typescript": "^2.9.2"
+  },
+  "dependencies": {
+    "nodemon": "^1.18.3"
+  }
+}
