@@ -1,7 +1,11 @@
-function HelloWorld(parameter: string) {
-    return `Hello world, ${parameter}`;
+import { UpbitBrowser } from './services/upbit-browser.service';
+import { Logger } from './services/logger.service';
+
+const logger = new Logger();
+try {
+    logger.info('Sarting service...')
+    const browser = new UpbitBrowser();
+    browser.doWork();
+} catch (e) {
+    logger.error(`Unexpected error happened: ${e}`);
 }
-
-const param = 'Den';
-
-console.log(HelloWorld(param));

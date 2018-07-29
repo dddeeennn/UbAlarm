@@ -16,6 +16,7 @@
     "typescript": "^2.9.2"
   },
   "dependencies": {
-    "nodemon": "^1.18.3"
+    "nodemon": "^1.18.3",
+    "xmlhttprequest": "^1.8.0"
   }
 }
