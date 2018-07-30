@@ -17,6 +17,6 @@
   },
   "dependencies": {
     "nodemon": "^1.18.3",
-    "xmlhttprequest": "^1.8.0"
+    "request": "^2.87.0"
   }
 }
