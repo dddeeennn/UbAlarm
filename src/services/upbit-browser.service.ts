@@ -47,12 +47,14 @@ export class UpbitBrowser {
                     'url': url,
                     'proxy': Config.proxyUrl
                 },
-                function (error, response, body) {
+                (error, response, body) => {
                     if (!error && response.statusCode == 200) {
                         this.logger.info('Fetch was succesed.');
                         resolve(JSON.parse(body));
                     }
                     else {
+                        if(!response || !response.statusCode) return;
+
                         this.logger.error(`When request ${url} error happened: ${response.statusCode};`);
                         reject(response.statusCode);
                     }
