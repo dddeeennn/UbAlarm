@@ -22,20 +22,53 @@ export class UpbitEventPublisher {
             return;
         }
 
-        function createDateAsUTC(date): Date {
-            return new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()));
+      function createDateAsUTC(date): Number {
+            var newDate = new Date(date);
+            return Date.UTC(newDate.getFullYear(),newDate.getMonth(),newDate.getDate(),newDate.getHours());
         }
 
-        function convertDateToUTC(date): Date {
-            return new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds());
+        function convertDateToUTC(date): Number {
+            var newDate = new Date(date);
+            return Date.UTC(newDate.getFullYear(),newDate.getMonth(),newDate.getDate(),newDate.getHours());
         }
 
-        const needNotify = model.data.list.some((listItem) =>
-            !!(~listItem.title.indexOf(Config.matchWord) &&
-                (+convertDateToUTC(listItem.created_at) - +createDateAsUTC(Date.now())) < Config.eventFreshnessMin));
+        function sleep(ms): void {
+            ms += new Date().getTime();
+            while (new Date() < ms){}
+        }
 
-        if (needNotify) {
-            // TODO: notify subscribers and store in temporary storage
+        function playSong(): void {
+            var exec = require('child_process').exec;
+            exec("open song.mp3", function(err, stdout, stderr) { //надо проверить на виндоус
+                if (err) {
+                      console.log("Song execute error!");//заменить на logger
+                }
+                else{
+                      console.log("Playing song...");//заменить на logger
+                      sleep(30*1000);//задержка раз в 30 секунд
+                }
+            });
+        }
+
+        const needNotify = model.data.list.some((listItem) => {
+                if((+createDateAsUTC(Date.now()) - +convertDateToUTC(listItem.created_at)) < Config.eventFreshnessMin*1000||Config.test)
+                {
+                      console.log("\x1b[32m",listItem.title);//выводим что покупать
+                      return true;
+                }
+                return false;
+              });
+
+
+        if (needNotify||Config.test) {
+            console.log("\x1b[31m","Buy Now!!!");
+            console.log("\x1b[0m");
+            playSong();
+        }
+        else{
+            console.log("\x1b[32m","Nothing new");
+            console.log("\x1b[0m");
+            //playSong(); //для теста
         }
     }
 }
