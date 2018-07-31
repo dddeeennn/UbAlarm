@@ -41,7 +41,7 @@ export class UpbitBrowser {
     private requestUpbit(): Promise<ApiResponseModel> {
         const url = Config.upbitUrl.replace('{key}', Config.keyWord);
         return new Promise<ApiResponseModel>((resolve, reject) => {
-            this.logger.info(`Fetch ${url}`);
+            //this.logger.info(`Fetch ${url}`);
             request(
                 {
                     'url': url,
@@ -51,6 +51,7 @@ export class UpbitBrowser {
                     if (!error && response.statusCode == 200) {
                         this.logger.info('Fetch was succesed.');
                         resolve(JSON.parse(body));
+
                     }
                     else {
                         if(!response || !response.statusCode) return;
