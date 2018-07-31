@@ -1,6 +1,10 @@
 import { Logger } from './logger.service';
 import { ApiResponseModel } from '../models/api-response.model';
+import { TelegramPublisher } from './telegram-publisher.service';
+
 var Config = require('./../config.json');
+var telegramBot = new TelegramPublisher();
+const platform = require('os').platform();
 
 export class UpbitEventPublisher {
     private logger: Logger;
@@ -32,43 +36,48 @@ export class UpbitEventPublisher {
             return Date.UTC(newDate.getFullYear(),newDate.getMonth(),newDate.getDate(),newDate.getHours());
         }
 
-        function sleep(ms): void {
+        function sleep(ms): void { //заменить на setInterval
             ms += new Date().getTime();
             while (new Date() < ms){}
         }
 
+
         function playSong(): void {
+
             var exec = require('child_process').exec;
-            exec("open song.mp3", function(err, stdout, stderr) { //надо проверить на виндоус
+            var cmdCommand = "";
+
+            if(require('os').platform()=="darwin")//для осХ
+                cmdCommand = "open ";
+
+            exec(cmdCommand+"song.mp3", function(err, stdout, stderr) { //надо проверить на виндоус
                 if (err) {
                       console.log("Song execute error!");//заменить на logger
                 }
                 else{
                       console.log("Playing song...");//заменить на logger
-                      sleep(30*1000);//задержка раз в 30 секунд
+                      sleep(30*1000);//надо это заменить на setInterval
                 }
             });
         }
 
         const needNotify = model.data.list.some((listItem) => {
-                if((+createDateAsUTC(Date.now()) - +convertDateToUTC(listItem.created_at)) < Config.eventFreshnessMin*1000||Config.test)
-                {
+              if((+createDateAsUTC(Date.now()) - +convertDateToUTC(listItem.created_at)) < Config.eventFreshnessMin*1000)
+                  {
                       console.log("\x1b[32m",listItem.title);//выводим что покупать
+                      telegramBot.sendMsg(listItem.title);
                       return true;
-                }
-                return false;
-              });
+                  }
+              return false;
+        });
 
-
-        if (needNotify||Config.test) {
+        if (needNotify) {
             console.log("\x1b[31m","Buy Now!!!");
-            console.log("\x1b[0m");
+            telegramBot.sendMsg("Buy now");
             playSong();
         }
         else{
-            console.log("\x1b[32m","Nothing new");
-            console.log("\x1b[0m");
-            //playSong(); //для теста
+            console.log("nothing new");
         }
     }
 }
