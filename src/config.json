@@ -4,6 +4,7 @@
     "matchWord": "[거래] 원화 마켓 신규 상장",
     "proxyUrl": "",
     "notifiers": ["alarm"],
-    "refreshIntervalSec": 10,
-    "eventFreshnessMin": 15
+    "refreshIntervalSec": 1,
+    "eventFreshnessMin": 15,
+    "test": false
 }
