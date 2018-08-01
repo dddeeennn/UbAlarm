@@ -21,28 +21,21 @@ export class Bittrex {
         });
     }
 */
-    public getQuantity(ticker):void{
-      bittrex.getmarkethistory({ market : 'BTC-LTC' }, function( data, err ) {
-        console.log( data );
-      });
-
-      bittrex.getticker( { market : 'BTC-'+ticker }, function( data, err ) {
-      console.log("Quantity"+ ((1/data.result.Last)-((1/data.result.Last)*0.2)) );
-    //  return (1/data.result.Last)-((1/data.result.Last)*0.2);
-      });
-
+    public getHistory(ticker):void{
+        bittrex.getmarkethistory({ market : 'BTC-LTC' }, function( data, err ) {
+          console.log( data );
+        });
     }
+/*
+    public getQuantity(ticker):void{
+        bittrex.getticker( { market : 'BTC-'+ticker }, function( data, err ) {
+        console.log("Quantity"+ ((1/data.result.Last)-((1/data.result.Last)*0.2)) );
+      //  return (1/data.result.Last)-((1/data.result.Last)*0.2);
+        });
+    }
+*/
 
-    /*public getRate(ticker):String{
-      var dt;
-      dt = bittrex.getticker( { market : 'BTC-'+ticker }, function( data, err ) {
-      //console.log("Rate"+ (data.result.Last+(data.result.Last*1.1)) );
-      dt = data.result.Last+(data.result.Last*1.1);
-      });
-      if(typeof dt!="undefined")
-      console.log(dt);
-      return dt;
-    }*/
+
 
 //#####################################
 //####         РАБОЧИЙ МЕТОД       ####

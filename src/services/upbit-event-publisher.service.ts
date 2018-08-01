@@ -81,8 +81,8 @@ export class UpbitEventPublisher {
         }
         else{
             console.log("nothing new");
-            var btx = new Bittrex();
-            btx.getQuantity("LTC");
+            //var btx = new Bittrex();
+            //btx.getQuantity("LTC");
             //new Bittrex().buyNow();
 
 
