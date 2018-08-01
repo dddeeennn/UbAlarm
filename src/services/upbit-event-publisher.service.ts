@@ -1,6 +1,7 @@
 import { Logger } from './logger.service';
 import { ApiResponseModel } from '../models/api-response.model';
 import { TelegramPublisher } from './telegram-publisher.service';
+import { Bittrex } from './bittrex.service';
 
 var Config = require('./../config.json');
 var telegramBot = new TelegramPublisher();
@@ -74,10 +75,17 @@ export class UpbitEventPublisher {
         if (needNotify) {
             console.log("\x1b[31m","Buy Now!!!");
             telegramBot.sendMsg("Buy now");
+          //  var btx = new Bittrex();
+          //  btx.buyNow("LTC");
             playSong();
         }
         else{
             console.log("nothing new");
+            var btx = new Bittrex();
+            btx.getQuantity("LTC");
+            //new Bittrex().buyNow();
+
+
         }
     }
 }

@@ -16,6 +16,7 @@
     "typescript": "^2.9.2"
   },
   "dependencies": {
+    "node-bittrex-api": "^0.8.3",
     "node-telegram-bot-api": "^0.30.0",
     "nodemon": "^1.18.3",
     "request": "^2.87.0"

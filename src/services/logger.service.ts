@@ -4,11 +4,11 @@ export class Logger {
     }
 
     public warn(message: string): void {
-        console.warn(`[WARN][${this.getTimestamp()}] ${message}`);
+        console.warn(`\x1b[31m`,`[WARN][${this.getTimestamp()}] ${message}`);
     }
 
     public error(message: string): void {
-        console.error(`[EREOR][${this.getTimestamp()}] ${message}`);
+        console.error(`\x1b[31m`,`[EREOR][${this.getTimestamp()}] ${message}`);
     }
 
     private getTimestamp(): string {
