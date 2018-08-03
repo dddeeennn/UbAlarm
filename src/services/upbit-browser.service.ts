@@ -52,7 +52,7 @@ export class UpbitBrowser {
                         this.logger.info('Fetch was succesed.');
 
                         if(Config.test){ //для тестов подменяем JSON, подставляем текущее дату-время
-                            body = '{"success":true,"data":{"total_count":16,"total_pages":1,"list":[{"created_at":"'+new Date()+'","updated_at":"2018-07-31T22:46:38+09:00","id":480,"title":"(XVG)","view_count":752909},{"created_at":"2018-07-27T14:41:11+09:00","updated_at":"2018-07-31T22:46:38+09:00","id":480,"title":"(RFR, DMT)","view_count":752909},{"created_at":"2018-07-25T12:16:03+09:00","updated_at":"2018-07-31T22:46:38+09:00","id":476,"title":"(IOST)","view_count":341449},{"created_at":"2018-07-23T18:41:13+09:00","updated_at":"2018-07-31T22:46:38+09:00","id":472,"title":"BAT, ADT)","view_count":368423}],"fixed_notices":[],"has_more":false,"before":null}}';
+                            body = '{"success":true,"data":{"total_count":16,"total_pages":1,"list":[{"created_at":"'+new Date()+'","updated_at":"2018-07-31T22:46:38+09:00","id":480,"title":"(TEST)","view_count":752909},{"created_at":"2018-07-27T14:41:11+09:00","updated_at":"2018-07-31T22:46:38+09:00","id":480,"title":"(RFR, DMT)","view_count":752909},{"created_at":"2018-07-25T12:16:03+09:00","updated_at":"2018-07-31T22:46:38+09:00","id":476,"title":"(IOST)","view_count":341449},{"created_at":"2018-07-23T18:41:13+09:00","updated_at":"2018-07-31T22:46:38+09:00","id":472,"title":"BAT, ADT)","view_count":368423}],"fixed_notices":[],"has_more":false,"before":null}}';
                         }
                         resolve(JSON.parse(body));
                     }

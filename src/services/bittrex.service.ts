@@ -21,11 +21,12 @@ export class Bittrex {
         });
     }
 */
-    public getHistory(ticker):void{
+/*    public getHistory(ticker):void{
         bittrex.getmarkethistory({ market : 'BTC-LTC' }, function( data, err ) {
           console.log( data );
         });
     }
+*/
 /*
     public getQuantity(ticker):void{
         bittrex.getticker( { market : 'BTC-'+ticker }, function( data, err ) {
