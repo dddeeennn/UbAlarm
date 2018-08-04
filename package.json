@@ -19,6 +19,8 @@
     "node-bittrex-api": "^0.8.3",
     "node-telegram-bot-api": "^0.30.0",
     "nodemon": "^1.18.3",
-    "request": "^2.87.0"
+    "request": "^2.87.0",
+    "winston": "^3.0.0",
+    "winston-daily-rotate-file": "^3.3.0"
   }
 }

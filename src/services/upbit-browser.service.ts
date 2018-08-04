@@ -11,11 +11,9 @@ var StubApiResponse = require('../tests/api-response-stub.json');
 export class UpbitBrowser {
     private interval: NodeJS.Timer;
     private eventPublisher: UpbitEventPublisher;
-    private logger: Logger;
 
     constructor() {
         this.eventPublisher = new UpbitEventPublisher();
-        this.logger = new Logger();
     }
 
     public doWork() {
@@ -26,16 +24,16 @@ export class UpbitBrowser {
 
     private handleInterval(): void {
         try {
-            this.logger.info('Regular job is starting...');
+            Logger.info('Regular job is starting...');
 
             this.requestUpbit()
                 .then((response) => this.eventPublisher.handleResponse(response))
                 .catch(e => {
-                    this.logger.error(`Exception occured: ${e}`);
+                    Logger.error(`Exception occured: ${e}`);
                 });
         }
         catch (e) {
-            this.logger.error(`Unexpected exception occured: ${e}`);
+            Logger.error(`Unexpected exception occured: ${e}`);
             clearInterval(this.interval);
             throw e;
         }
@@ -44,7 +42,7 @@ export class UpbitBrowser {
     private requestUpbit(): Promise<ApiResponseModel> {
         const url = Config.upbitUrl.replace('{key}', Config.keyWord);
         return new Promise<ApiResponseModel>((resolve, reject) => {
-            this.logger.info(`Fetch ${url}`);
+            Logger.info(`Fetch ${url}`);
             request(
                 {
                     'url': url,
@@ -52,7 +50,7 @@ export class UpbitBrowser {
                 },
                 (error, response, body) => {
                     if (!error && response.statusCode == 200) {
-                        this.logger.info('Fetch was succesed.');
+                        Logger.info('Fetch was successed.');
 
                         if (Config.test) {
                             resolve(StubApiResponse);
@@ -62,7 +60,7 @@ export class UpbitBrowser {
                     else {
                         if (!response || !response.statusCode) return;
 
-                        this.logger.error(`When request ${url} error happened: ${response.statusCode};`);
+                        Logger.error(`When request ${url} error happened: ${response.statusCode};`);
                         reject(response.statusCode);
                     }
                 }
@@ -71,7 +69,7 @@ export class UpbitBrowser {
     }
 
     private initialize(): void {
-        this.logger.info(`Current setting is ${JSON.stringify(Config)}.`);
+        Logger.info(`Current setting is ${JSON.stringify(Config)}.`);
         this.eventPublisher.addSubscriber(new AlarmNotifierService());
         this.eventPublisher.addSubscriber(new TelegramNotifierService());
     }

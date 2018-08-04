@@ -4,22 +4,16 @@ var exec = require('child_process').exec;
 var os = require('os');
 
 export class AlarmNotifierService implements Notifier {
-    private logger: Logger;
-
-    constructor() {
-        this.logger = new Logger();
-    }
-
     notify(message: string): void {
-        this.logger.info(`Start alarm notification ...`);
+        Logger.info(`Start alarm notification ...`);
 
         const command = this.buildCommand();
 
         exec(command, (err, stdout, stderr) => {
             if (err) {
-                this.logger.error(`When tried run ${command} an error occured: ${err};${stderr};${stdout}`);
+                Logger.error(`When tried run ${command} an error occured: ${err};${stderr};${stdout}`);
             } else {
-                this.logger.info(`Command '${command}' was executed successfully.`);
+                Logger.info(`Command '${command}' was executed successfully.`);
             }
         });
     }

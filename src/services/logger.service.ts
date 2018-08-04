@@ -1,17 +1,40 @@
+const winston = require('winston');
+const dailyRotateFile = require('winston-daily-rotate-file');
+
 export class Logger {
-    public info(message: string): void {
-        console.log(`[INFO][${this.getTimestamp()}] ${message}`);
+    private static defaultOpts = {
+        datePattern: 'YYYY-MM-DD-HH',
+        dirname: './logs',
+        maxSize: '20m',
+        maxFiles: '14d'
+    };
+    private static allOpts = Object.assign({}, Logger.defaultOpts, { filename: 'all-%DATE%.log' });
+    private static errorOpts = Object.assign({}, Logger.defaultOpts, {
+        filename: 'error-%DATE%.log',
+        level: 'error'
+    });
+
+    private static logger = winston.createLogger({
+        transports: [
+            new winston.transports.Console(),
+            new (winston.transports.DailyRotateFile)(Logger.allOpts),
+            new (winston.transports.DailyRotateFile)(Logger.errorOpts)
+        ]
+    });;
+
+    public static info(message: string): void {
+        this.logger.info(message);
     }
 
-    public warn(message: string): void {
-        console.warn(`\x1b[31m`,`[WARN][${this.getTimestamp()}] ${message}`);
+    public static warn(message: string): void {
+        this.logger.warn(message);
     }
 
-    public error(message: string): void {
-        console.error(`\x1b[31m`,`[EREOR][${this.getTimestamp()}] ${message}`);
+    public static error(message: string): void {
+        this.logger.error(message);
     }
 
-    private getTimestamp(): string {
-        return new Date().toUTCString();
+    public static startTimer(): any {
+        return this.logger.startTimer();
     }
 }
