@@ -1,9 +1,12 @@
 import { Logger } from './logger.service';
 import { UpbitEventPublisher } from './upbit-event-publisher.service';
 import { ApiResponseModel } from '../models/api-response.model';
+import { AlarmNotifierService } from './notifiers/alarm-notifier.service';
+import { TelegramNotifierService } from './notifiers/telegram-notifier.service';
 const https = require('https');
 const request = require('request');
 var Config = require('./../config.json');
+var StubApiResponse = require('../tests/api-response-stub.json');
 
 export class UpbitBrowser {
     private interval: NodeJS.Timer;
@@ -16,7 +19,7 @@ export class UpbitBrowser {
     }
 
     public doWork() {
-        this.logger.info(`Current setting is ${JSON.stringify(Config)}.`);
+        this.initialize();
         this.handleInterval(); // start immediately
         this.interval = setInterval(() => this.handleInterval(), Config.refreshIntervalSec * 1000)
     }
@@ -41,23 +44,23 @@ export class UpbitBrowser {
     private requestUpbit(): Promise<ApiResponseModel> {
         const url = Config.upbitUrl.replace('{key}', Config.keyWord);
         return new Promise<ApiResponseModel>((resolve, reject) => {
-            //this.logger.info(`Fetch ${url}`);
+            this.logger.info(`Fetch ${url}`);
             request(
                 {
                     'url': url,
-                    'proxy': ""//Config.proxyUrl //тут пока лучше без прокси, надежнее будет
+                    'proxy': Config.proxyUrl
                 },
                 (error, response, body) => {
                     if (!error && response.statusCode == 200) {
                         this.logger.info('Fetch was succesed.');
 
-                        if(Config.test){ //для тестов подменяем JSON, подставляем текущее дату-время
-                            body = '{"success":true,"data":{"total_count":16,"total_pages":1,"list":[{"created_at":"'+new Date()+'","updated_at":"2018-07-31T22:46:38+09:00","id":480,"title":"(TEST)","view_count":752909},{"created_at":"2018-07-27T14:41:11+09:00","updated_at":"2018-07-31T22:46:38+09:00","id":480,"title":"(RFR, DMT)","view_count":752909},{"created_at":"2018-07-25T12:16:03+09:00","updated_at":"2018-07-31T22:46:38+09:00","id":476,"title":"(IOST)","view_count":341449},{"created_at":"2018-07-23T18:41:13+09:00","updated_at":"2018-07-31T22:46:38+09:00","id":472,"title":"BAT, ADT)","view_count":368423}],"fixed_notices":[],"has_more":false,"before":null}}';
+                        if (Config.test) {
+                            resolve(StubApiResponse);
                         }
                         resolve(JSON.parse(body));
                     }
                     else {
-                        if(!response || !response.statusCode) return;
+                        if (!response || !response.statusCode) return;
 
                         this.logger.error(`When request ${url} error happened: ${response.statusCode};`);
                         reject(response.statusCode);
@@ -65,5 +68,11 @@ export class UpbitBrowser {
                 }
             );
         });
+    }
+
+    private initialize(): void {
+        this.logger.info(`Current setting is ${JSON.stringify(Config)}.`);
+        this.eventPublisher.addSubscriber(new AlarmNotifierService());
+        this.eventPublisher.addSubscriber(new TelegramNotifierService());
     }
 }

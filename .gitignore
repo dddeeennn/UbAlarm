@@ -2,6 +2,7 @@
 node_modules/*
 
 # other files
+**/keys.json
 .vscode/*
 /**/.vs/
 .gitconfig
